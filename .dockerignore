@@ -1,0 +1,7 @@
+.dockerignore
+Dockerfile.dev
+.gitignore
+node_modules
+.env
+.prettierrc.json
+docker-compose.dev.yml
