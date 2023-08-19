@@ -68,7 +68,7 @@ app.delete('/api/blogs/:id', async (req, res) => {
     if (blog) {
       // If exists, destroy
       await blog.destroy();
-      res.status(200).end();
+      res.status(204).end();
     } else {
       // If not exists, send appropriate error code
       res.status(404).end();
