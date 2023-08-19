@@ -1,5 +1,6 @@
 const express = require('express');
 const blogRouter = require('./controllers/blog');
+const userRouter = require('./controllers/user');
 const { PORT } = require('./utils/config');
 const { connectToDB } = require('./utils/db');
 const errorHandler = require('./utils/error-handler');
@@ -10,6 +11,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/api/blogs', blogRouter);
+app.use('/api/users', userRouter);
 
 app.use(errorHandler);
 
