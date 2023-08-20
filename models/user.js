@@ -17,6 +17,11 @@ User.init(
     userName: {
       type: DataTypes.TEXT,
       allowNull: false,
+      validate: {
+        isEmail: {
+          msg: 'username must be a valid email address',
+        },
+      },
     },
   },
   {
