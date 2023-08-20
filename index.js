@@ -1,6 +1,7 @@
 const express = require('express');
 const blogRouter = require('./controllers/blog');
 const userRouter = require('./controllers/user');
+const loginRouter = require('./controllers/login');
 const { PORT } = require('./utils/config');
 const { connectToDB } = require('./utils/db');
 const errorHandler = require('./utils/error-handler');
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);
+app.use('/api/login', loginRouter);
 
 app.use(errorHandler);
 

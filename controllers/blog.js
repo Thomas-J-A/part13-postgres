@@ -1,5 +1,6 @@
 const express = require('express');
-const { Blog } = require('../models');
+const { User, Blog } = require('../models');
+const extractToken = require('../utils/extract-token');
 
 const router = express.Router();
 
@@ -22,9 +23,18 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', extractToken, async (req, res, next) => {
   try {
-    const blog = await Blog.create(req.body);
+    // Find logged-in user
+    const user = await User.findByPk(req.tokenPayload.id);
+
+    // Create a new blog, associated with logged-in user
+    const blog = await Blog.create({
+      ...req.body,
+      author: user.name,
+      userId: user.id,
+    });
+
     res.json(blog);
   } catch (err) {
     next(err);

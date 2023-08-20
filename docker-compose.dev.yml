@@ -8,6 +8,7 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:secret_password@postgres:5432/postgres
       - PORT=3000
+      - TOKEN_SECRET=super_secret_jwt_secret123
     ports:
       - 3000:3000
     volumes:
