@@ -66,7 +66,6 @@ router.post('/', extractToken, async (req, res, next) => {
     // Create a new blog, associated with logged-in user
     const blog = await Blog.create({
       ...req.body,
-      author: user.name,
       userId: user.id,
     });
 
