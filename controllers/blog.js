@@ -18,10 +18,25 @@ const blogFinder = async (req, res, next) => {
 router.get('/', async (req, res, next) => {
   const where = {};
 
+  // if (req.query.search) {
+  //   where.title = {
+  //     [Op.iLike]: `%${req.query.search}%`,
+  //   };
+  // }
+
   if (req.query.search) {
-    where.title = {
-      [Op.iLike]: `%${req.query.search}%`,
-    };
+    where[Op.or] = [
+      {
+        title: {
+          [Op.iLike]: `%${req.query.search}%`,
+        },
+      },
+      {
+        author: {
+          [Op.iLike]: `%${req.query.search}%`,
+        },
+      },
+    ];
   }
 
   try {
