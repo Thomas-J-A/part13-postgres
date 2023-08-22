@@ -9,6 +9,15 @@ const errorHandler = (err, req, res, next) => {
       .json({ error: 'Username must be a valid email address' });
   }
 
+  if (
+    err.errors[0].validatorKey === 'min' ||
+    err.errors[0].validatorKey === 'max'
+  ) {
+    return res
+      .status(400)
+      .json({ error: 'Blog must have been written between 1991 and 2023' });
+  }
+
   return res.status(500).json({ error: 'Something went terribly wrong...' });
 };
 
