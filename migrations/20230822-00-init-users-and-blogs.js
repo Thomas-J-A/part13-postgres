@@ -35,7 +35,7 @@ module.exports = {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      userName: {
+      user_name: {
         type: DataTypes.TEXT,
         allowNull: false,
         validate: {
