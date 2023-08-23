@@ -5,7 +5,7 @@ const ReadingList = require('./reading-list');
 User.hasMany(Blog, { foreignKey: 'userId' });
 Blog.belongsTo(User, { foreignKey: 'userId' });
 
-User.belongsToMany(Blog, { through: ReadingList });
+User.belongsToMany(Blog, { through: ReadingList, as: 'readings' });
 Blog.belongsToMany(User, { through: ReadingList });
 
 module.exports = {

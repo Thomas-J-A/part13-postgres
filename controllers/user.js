@@ -27,6 +27,31 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    // Try to find user with specified id
+    const user = await User.findByPk(req.params.id, {
+      attributes: ['name', 'userName'],
+      include: {
+        model: Blog,
+        as: 'readings',
+        attributes: { exclude: ['userId'] },
+        through: {
+          attributes: [],
+        },
+      },
+    });
+
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).end();
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.put('/:username', async (req, res, next) => {
   try {
     // Find user record with corresponding username value
