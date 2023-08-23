@@ -1,4 +1,5 @@
 const express = require('express');
+const { Op } = require('sequelize');
 const { User, Blog } = require('../models');
 
 const router = express.Router();
@@ -22,6 +23,39 @@ router.post('/', async (req, res, next) => {
   try {
     const user = await User.create(req.body);
     res.json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/:id', async (req, res, next) => {
+  const where = {};
+
+  if (req.query.read) {
+    where.isRead = {
+      [Op.eq]: req.query.read,
+    };
+  }
+
+  try {
+    const user = await User.findByPk(req.params.id, {
+      attributes: ['name', 'userName'],
+      include: {
+        model: Blog,
+        as: 'readings',
+        attributes: { exclude: ['userId'] },
+        through: {
+          attributes: ['isRead', 'id'],
+          where,
+        },
+      },
+    });
+
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).end();
+    }
   } catch (err) {
     next(err);
   }
