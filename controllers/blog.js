@@ -2,6 +2,7 @@ const express = require('express');
 const { Op } = require('sequelize');
 const { User, Blog } = require('../models');
 const extractToken = require('../utils/extract-token');
+const validateSession = require('../utils/validate-session');
 
 const router = express.Router();
 
@@ -58,7 +59,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.post('/', extractToken, async (req, res, next) => {
+router.post('/', extractToken, validateSession, async (req, res, next) => {
   try {
     // Find logged-in user
     const user = await User.findByPk(req.tokenPayload.id);
@@ -89,28 +90,34 @@ router.put('/:id', blogFinder, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', extractToken, blogFinder, async (req, res, next) => {
-  if (req.blog) {
-    try {
-      // Only blog author may delete their blog
-      if (req.blog.userId !== req.tokenPayload.id) {
-        return res
-          .status(401)
-          .json({ error: 'Only blog author may delete this blog' });
+router.delete(
+  '/:id',
+  extractToken,
+  validateSession,
+  blogFinder,
+  async (req, res, next) => {
+    if (req.blog) {
+      try {
+        // Only blog author may delete their blog
+        if (req.blog.userId !== req.tokenPayload.id) {
+          return res
+            .status(401)
+            .json({ error: 'Only blog author may delete this blog' });
+        }
+
+        // Delete blog
+        await req.blog.destroy();
+        res.status(204).end();
+      } catch (err) {
+        next(err);
       }
-
-      // Delete blog
-      await req.blog.destroy();
-      res.status(204).end();
-    } catch (err) {
-      next(err);
     }
-  }
 
-  // Return 204 also if blog doesn't exist
-  else {
-    res.status(204).end();
-  }
-});
+    // Return 204 also if blog doesn't exist
+    else {
+      res.status(204).end();
+    }
+  },
+);
 
 module.exports = router;

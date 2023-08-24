@@ -1,6 +1,7 @@
 const express = require('express');
 const { ReadingList } = require('../models');
 const extractToken = require('../utils/extract-token');
+const validateSession = require('../utils/validate-session');
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:id', extractToken, async (req, res, next) => {
+router.put('/:id', extractToken, validateSession, async (req, res, next) => {
   try {
     const readingList = await ReadingList.findByPk(req.params.id);
 

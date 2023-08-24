@@ -2,6 +2,7 @@ const express = require('express');
 const authorRouter = require('./controllers/author');
 const blogRouter = require('./controllers/blog');
 const loginRouter = require('./controllers/login');
+const logoutRouter = require('./controllers/logout');
 const readingListRouter = require('./controllers/reading-list');
 const userRouter = require('./controllers/user');
 const { PORT } = require('./utils/config');
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/authors', authorRouter);
 app.use('/api/blogs', blogRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/logout', logoutRouter);
 app.use('/api/reading-lists', readingListRouter);
 app.use('/api/users', userRouter);
 

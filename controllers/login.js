@@ -1,6 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
+const { User, Session } = require('../models');
 const { TOKEN_SECRET } = require('../utils/config');
 
 const router = express.Router();
@@ -27,6 +27,9 @@ router.post('/', async (req, res, next) => {
     };
 
     const token = jwt.sign(payload, TOKEN_SECRET);
+
+    // Start a session for authed user
+    await Session.create({ userId: user.id, token });
 
     res.status(200).json({ token, user });
   } catch (err) {
